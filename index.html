@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>AI Object Detection Pro</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/ml5@0.12.2/dist/ml5.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <h1>AI Object Detection Pro</h1>
+      <p class="subtitle">By Abdelli Wacim , Haffar Kenza , Bellalouna Nour</p>
+    </header>
+
+    <!-- Loading indicator -->
+    <div id="loadingText">
+      <div class="loader"></div>
+      Loading ML model and initializing camera...
+    </div>
+
+    <!-- Main content -->
+    <div class="content">
+      <!-- Left side - Camera view -->
+      <div class="canvas-container">
+        <video id="video" playsinline autoplay muted></video>
+        <canvas id="c1"></canvas>
+      </div>
+
+      <!-- Right side - Controls and results -->
+      <div class="sidebar">
+        <!-- Controls panel -->
+        <div class="panel" id="controls">
+          <div class="panel-header">
+            <div class="panel-icon">
+              <i class="fas fa-sliders-h"></i>
+            </div>
+            <h3 class="panel-title">Controls</h3>
+          </div>
+
+          <!-- Status message -->
+          <div id="statusText" class="status">Ready</div>
+
+          <div class="control-group">
+            <!-- AI Detection toggle -->
+            <div class="control-row">
+              <span class="control-label">AI Detection</span>
+              <label class="switch">
+                <input type="checkbox" id="ai" disabled>
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <!-- Camera selection -->
+            <div class="control-row">
+              <span class="control-label">Camera</span>
+              <select id="cameraSelect">
+                <option value="environment">Back Camera</option>
+                <option value="user">Front Camera</option>
+              </select>
+            </div>
+
+            <!-- FPS Control -->
+            <div class="control-row">
+              <span class="control-label">Frame Rate</span>
+              <div class="slider-container">
+                <input type="range" id="fps" min="1" max="60" value="30">
+                <span class="control-value" id="fpsValue">30</span>
+              </div>
+            </div>
+
+            <!-- Confidence Threshold -->
+            <div class="control-row">
+              <span class="control-label">Detection Accuracy</span>
+              <div class="slider-container">
+                <input type="range" id="confidence" min="10" max="90" value="50">
+                <span class="control-value" id="confidenceValue">50%</span>
+              </div>
+            </div>
+
+            <!-- Capture button -->
+            <div class="control-row">
+              <button id="captureBtn" class="btn">
+                <i class="fas fa-camera btn-icon"></i> Capture Image
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detection results panel -->
+        <div class="panel objects-panel">
+          <div class="panel-header objects-header">
+            <div class="panel-icon">
+              <i class="fas fa-search"></i>
+            </div>
+            <h3 class="panel-title">Detected Objects</h3>
+            <span id="objectCounter">0</span>
+          </div>
+          
+          <div id="objectList">
+            <!-- Objects will be listed here -->
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+      <p>AI Object Detection Pro v1.0</p>
+    </footer>
+  </div>
+
+  <!-- Hidden video element for camera input -->
+  <video id="video" playsinline autoplay muted></video>
+
+  <!-- ML5.js initialization -->
+  <script>
+    // Global variable to track model loading
+    var modelIsLoaded = false;
+
+    // Load the object detection model
+    const objectDetector = ml5.objectDetector('cocossd', {}, modelLoaded);
+
+    // Called when model is ready
+    function modelLoaded() {
+      console.log("Model Loaded!");
+      modelIsLoaded = true;
+    }
+  </script>
+  
+  <!-- Main application script -->
+  <script src="video.js"></script>
+</body>
+
+</html>
